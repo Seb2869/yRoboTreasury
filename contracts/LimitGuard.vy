@@ -22,7 +22,9 @@ robo: public(immutable(Robo))
 whitelist: public(immutable(Whitelist))
 management: public(immutable(address))
 operator: public(address)
+cooldown: public(uint256)
 limits: public(HashMap[address, uint256])
+last: public(HashMap[address, uint256])
 
 implements: Robo
 
@@ -32,6 +34,11 @@ def __init__(_robo: address, _whitelist: address, _management: address):
     whitelist = Whitelist(_whitelist)
     management = _management
     self.operator = _management
+
+@external
+def set_cooldown(_cooldown: uint256):
+    assert msg.sender == management
+    self.cooldown = _cooldown
 
 @external
 def set_limit(_token: address, _amount: uint256):
@@ -48,4 +55,7 @@ def pull(_token: address, _amount: uint256 = max_value(uint256)) -> address:
     assert msg.sender == self.operator
     assert whitelist.whitelist(_token)
     assert _amount <= self.limits[_token]
+    assert block.timestamp >= self.last[_token] + self.cooldown
+
+    self.last[_token] = block.timestamp
     return robo.pull(_token, _amount)

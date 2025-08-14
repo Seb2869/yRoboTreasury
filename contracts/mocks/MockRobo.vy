@@ -15,3 +15,7 @@ def set_factory(_factory: address):
 @external
 def set_bucket(_bucket: address, _flag: bool):
     self.is_bucket[_bucket] = _flag
+
+@external
+def pull(_token: address, _amount: uint256) -> address:
+    return empty(address)
