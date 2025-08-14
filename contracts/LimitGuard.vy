@@ -8,8 +8,8 @@
 @notice
     Temporary guardrail for the RoboTreasury system. This contract queries a 
     whitelist of tokens that can be pulled from the ingress into RoboTreasury
-    by the operator. Each token has a limit of tokens that can be pulled
-    at once, configurable by management.
+    by the operator. Each token has a configurable limit of tokens that can be 
+    pulled at once, as well as a cooldown in between pulls of the same token.
 """
 
 interface Robo:
